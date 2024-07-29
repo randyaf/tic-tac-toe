@@ -1,0 +1,44 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid grey;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    height: 100vh;
+    width: 900px;
+    margin: 0 auto;
+}
+
+.container > .score-board {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 600px;
+    height: 100px;
+}
+
+.score-board > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.container > .game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    width: 600px;
+    height: 600px;
+    margin: auto 0;
+}
+
+.game-board > .cell img{
+    display: none;
+}
