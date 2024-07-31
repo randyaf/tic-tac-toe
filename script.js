@@ -85,3 +85,24 @@ const GameBoardController = (function() {
 })();
 
 GameBoardController.startGame();
+
+
+const ScoreBoard = (function() {
+    let player1Score = 0;
+    let player2Score = 0;
+    let tieScore = 0;
+    
+    const game = GameBoard;
+
+    function updateScore(player) {
+        if (player.name === "player1") player1Score++;
+        else if (player.name === "player2") player2Score++;
+        else tieScore++;
+    }
+
+    function resetScore() {
+        player1Score = 0;
+        player2Score = 0;
+        tieScore = 0;
+    }
+})();
