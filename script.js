@@ -1,6 +1,6 @@
 const GameBoard = (function() {
-    // const boardState = [];
-    const boardState = [1, "a-1", 2, "c-3", 3, "b-2"];
+    const boardState = [];
+    // const boardState = [1, "a-1", 2, "c-3", 3, "b-2"];
 
     function tickCell(row, column) {
         if (!checkMoveValidity(row, column)) return;
@@ -58,3 +58,30 @@ const GameBoard = (function() {
 
     return { boardState, tickCell, checkWinner };
 })();
+
+const GameBoardController = (function() {
+
+    const game = GameBoard;
+    let isGameFinished = false;
+
+    function startGame() {
+        isGameFinished = false;
+        for (let i = 0; i < 9; i++) {
+            if (isGameFinished) break;
+            proceedRound();
+        }
+    }
+
+    function proceedRound() {
+        game.tickCell(...prompt("pick the box").split("-"));
+        if (game.checkWinner() !== null) {
+            console.log("winning line: " + game.checkWinner());
+            isGameFinished = true;
+            return;
+        }
+    }
+
+    return { startGame };
+})();
+
+GameBoardController.startGame();
