@@ -80,6 +80,54 @@ const GameBoardController = (function() {
         }
     }
 
+const ScoreBoard = (function() {
+    let player1Score = 0;
+    let player2Score = 0;
+    let tieScore = 0;
+    
+    const game = GameBoard;
+
+    function updateScore() {
+        const winningLine = game.checkWinner();
+        if (winningLine !== null) {
+            if (game.getBoardState().indexOf(winningLine[0]) % 2 === 0) {
+                player1Score++;
+            } else if (game.getBoardState().indexOf(winningLine[0]) % 2 !== 0) {
+                player2Score++;
+            }
+        } else {
+            tieScore++;
+        }
+    }
+
+    function resetScore() {
+        player1Score = 0;
+        player2Score = 0;
+        tieScore = 0;
+    }
+
+    function getScores() {
+        return { player1Score, player2Score, tieScore };
+    }
+
+    return { getScores, updateScore, resetScore };
+})();
+
+const ScoreBoardView = (function() {
+    const playerScore = document.querySelector(".player-score");
+    const computerScore = document.querySelector(".computer-score");
+    const tieScore = document.querySelector(".tie-score");
+
+    function render() {
+        const scores = ScoreBoard.getScores();
+        playerScore.textContent = scores.player1Score;
+        computerScore.textContent = scores.player2Score;
+        tieScore.textContent = scores.tieScore;
+    }
+
+    return { render };
+})();
+
     function proceedRound(coordinate) {
         if (!isGameFinished) game.tickCell(...coordinate.split("-"));
         if (!isGameFinished && game.checkWinner() !== null) {
@@ -91,6 +139,8 @@ const GameBoardController = (function() {
             return;
         }
         if (isGameFinished) {
+            ScoreBoard.updateScore();
+            ScoreBoardView.render();
             game.resetBoard();
             isGameFinished = false;
         }
@@ -106,25 +156,7 @@ const GameBoardController = (function() {
 // GameBoardController.startGame();
 
 
-const ScoreBoard = (function() {
-    let player1Score = 0;
-    let player2Score = 0;
-    let tieScore = 0;
-    
-    const game = GameBoard;
 
-    function updateScore(player) {
-        if (player.name === "player1") player1Score++;
-        else if (player.name === "player2") player2Score++;
-        else tieScore++;
-    }
-
-    function resetScore() {
-        player1Score = 0;
-        player2Score = 0;
-        tieScore = 0;
-    }
-})();
 
 const GameBoardView = (function() {
     const gameBoardController = GameBoardController;
