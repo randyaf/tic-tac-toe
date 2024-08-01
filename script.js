@@ -56,7 +56,11 @@ const GameBoard = (function() {
         return null;
     }
 
-    return { boardState, tickCell, checkWinner };
+    function getBoardState() {
+        return boardState;
+    }
+
+    return { getBoardState, tickCell, checkWinner };
 })();
 
 const GameBoardController = (function() {
@@ -72,8 +76,8 @@ const GameBoardController = (function() {
         }
     }
 
-    function proceedRound() {
-        game.tickCell(...prompt("pick the box").split("-"));
+    function proceedRound(coordinate) {
+        game.tickCell(...coordinate.split("-"));
         if (game.checkWinner() !== null) {
             console.log("winning line: " + game.checkWinner());
             isGameFinished = true;
@@ -81,10 +85,14 @@ const GameBoardController = (function() {
         }
     }
 
-    return { startGame };
+    function getBoardState() {
+        return game.getBoardState();
+    }
+
+    return { startGame, proceedRound, getBoardState };
 })();
 
-GameBoardController.startGame();
+// GameBoardController.startGame();
 
 
 const ScoreBoard = (function() {
@@ -105,4 +113,41 @@ const ScoreBoard = (function() {
         player2Score = 0;
         tieScore = 0;
     }
+})();
+
+const GameBoardView = (function() {
+    const gameBoardController = GameBoardController;
+    const gameBoardElement = document.querySelector(".game-board");
+    const cells = document.querySelectorAll(".cell");
+
+    gameBoardElement.addEventListener("click", cellsClickHandler);
+
+    function cellsClickHandler(event) {
+        const cell = event.target.closest(".cell");
+        if (cell.matches(".cell")) {
+            gameBoardController.proceedRound(cell.dataset.coordinate);
+            render();
+        }
+    }
+
+    function render() {
+        // todo here to implement render
+        const boardState = gameBoardController.getBoardState();
+        for (let cell of cells) {
+            if (boardState.includes(cell.dataset.coordinate)) {
+                if (boardState.indexOf(cell.dataset.coordinate) % 2 === 0) {
+                    cell.querySelector(".check-icon > img").src = "./images/cross.svg";
+                    cell.querySelector(".check-icon > img").classList.add("visible");
+                }
+                else {
+                    cell.querySelector(".check-icon > img").src = "./images/circle.svg";
+                    cell.querySelector(".check-icon > img").classList.add("visible");
+                }
+            } else {
+                cell.querySelector(".check-icon > img").classList.remove("visible");
+            }
+        }
+    }
+
+    return { render };
 })();

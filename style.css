@@ -33,12 +33,23 @@
 .container > .game-board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: auto;
+    grid-auto-rows: 200px;
     width: 600px;
     height: 600px;
     margin: auto 0;
 }
 
+.game-board > .cell {
+    padding: 10px;
+}
+
 .game-board > .cell img{
     display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.game-board > .cell img.visible {
+    display: inline;
 }
