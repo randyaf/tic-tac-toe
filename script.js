@@ -60,7 +60,11 @@ const GameBoard = (function() {
         return boardState;
     }
 
-    return { getBoardState, tickCell, checkWinner };
+    function resetBoard() {
+        boardState.splice(0, boardState.length);
+    }
+
+    return { getBoardState, tickCell, checkWinner, resetBoard };
 })();
 
 const GameBoardController = (function() {
@@ -82,6 +86,10 @@ const GameBoardController = (function() {
             console.log("winning line: " + game.checkWinner());
             isGameFinished = true;
             return;
+        }
+        if (isGameFinished) {
+            game.resetBoard();
+            isGameFinished = false;
         }
     }
 
@@ -126,8 +134,8 @@ const GameBoardView = (function() {
         const cell = event.target.closest(".cell");
         if (cell.matches(".cell")) {
             gameBoardController.proceedRound(cell.dataset.coordinate);
-            render();
         }
+        render();
     }
 
     function render() {
