@@ -81,9 +81,12 @@ const GameBoardController = (function() {
     }
 
     function proceedRound(coordinate) {
-        game.tickCell(...coordinate.split("-"));
-        if (game.checkWinner() !== null) {
+        if (!isGameFinished) game.tickCell(...coordinate.split("-"));
+        if (!isGameFinished && game.checkWinner() !== null) {
             console.log("winning line: " + game.checkWinner());
+            isGameFinished = true;
+            return;
+        } else if (!isGameFinished && game.getBoardState().length === 9) {
             isGameFinished = true;
             return;
         }
