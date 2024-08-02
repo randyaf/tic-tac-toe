@@ -24,6 +24,7 @@ const GameBoard = (function() {
         }
     }
 
+
     function findWinningLine(playerCells) {
         for (let row of ["a", "b", "c"]) {
             const winningLine = [];
@@ -64,21 +65,43 @@ const GameBoard = (function() {
         boardState.splice(0, boardState.length);
     }
 
-    return { getBoardState, tickCell, checkWinner, resetBoard };
+    return { getBoardState, tickCell, checkWinner, resetBoard, checkMoveValidity };
 })();
 
-const GameBoardController = (function() {
+
+// todo create the computer module with ability to make random move,
+// and even better if it can have multiple difficulties.
+
+const Computer = (function() {
 
     const game = GameBoard;
-    let isGameFinished = false;
 
-    function startGame() {
-        isGameFinished = false;
-        for (let i = 0; i < 9; i++) {
-            if (isGameFinished) break;
-            proceedRound();
+    function makeMove(difficulty = "easy") {
+        if (difficulty = "easy") return easyDifMove();
+        else if (difficulty = "medium") return mediumDifMove();
+        else if (difficulty = "hard") return hardDifMove();
+        else return easyDifMove();
+    }
+
+    function getRandomCoordinate() {
+        return `${["a", "b", "c"][Math.floor(Math.random() * 3)]}-${Math.floor(Math.random() * 3) + 1}`;
+    }
+
+    // function defendCell() {
+
+    // }
+
+    function easyDifMove() {
+        console.log("inside easy move");
+        while(true) {
+            console.count("loop");
+            const coordinate = getRandomCoordinate();
+            if(game.checkMoveValidity(...coordinate.split("-"))) return coordinate;
         }
     }
+
+    return { makeMove };
+})();
 
 const ScoreBoard = (function() {
     let player1Score = 0;
@@ -127,6 +150,22 @@ const ScoreBoardView = (function() {
 
     return { render };
 })();
+
+
+
+
+const GameBoardController = (function() {
+
+    const game = GameBoard;
+    let isGameFinished = false;
+
+    function startGame() {
+        isGameFinished = false;
+        for (let i = 0; i < 9; i++) {
+            if (isGameFinished) break;
+            proceedRound();
+        }
+    }
 
     function proceedRound(coordinate) {
         if (!isGameFinished) game.tickCell(...coordinate.split("-"));
