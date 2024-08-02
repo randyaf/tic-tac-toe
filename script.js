@@ -7,6 +7,16 @@ const GameBoard = (function() {
         boardState.push(`${row}-${column}`);
     }
 
+    function getPlayer1Cells() {
+        if (boardState.length === 0) return [];
+        return boardState.filter(cell => boardState.indexOf(cell) % 2 !== 0);
+    }
+
+    function getPlayer2Cells() {
+        if (boardState.length === 0) return [];
+        return boardState.filter(cell => boardState.indexOf(cell) % 2 === 0);
+    }
+
     function checkMoveValidity(row, column) {
         if (boardState.find(coordinate => coordinate === `${row}-${column}`)) return false;
         else if (!["a", "b", "c"].includes(row)) return false;
@@ -15,13 +25,8 @@ const GameBoard = (function() {
     }
 
     function checkWinner() {
-        if (boardState.length % 2 === 0) {
-            const evenPlayer = boardState.filter(coordinate => boardState.indexOf(coordinate) % 2 !== 0);
-            return findWinningLine(evenPlayer);
-        } else {
-            const oddPlayer = boardState.filter(coordinate => boardState.indexOf(coordinate) % 2 === 0);
-            return findWinningLine(oddPlayer);
-        }
+        if (boardState.length % 2 === 0) return findWinningLine(getPlayer1Cells());
+        else return findWinningLine(getPlayer2Cells());
     }
 
 
