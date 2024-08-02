@@ -9,12 +9,12 @@ const GameBoard = (function() {
 
     function getPlayer1Cells() {
         if (boardState.length === 0) return [];
-        return boardState.filter(cell => boardState.indexOf(cell) % 2 !== 0);
+        return boardState.filter(cell => boardState.indexOf(cell) % 2 === 0);
     }
 
     function getPlayer2Cells() {
         if (boardState.length === 0) return [];
-        return boardState.filter(cell => boardState.indexOf(cell) % 2 === 0);
+        return boardState.filter(cell => boardState.indexOf(cell) % 2 !== 0);
     }
 
     function checkMoveValidity(row, column) {
@@ -25,8 +25,8 @@ const GameBoard = (function() {
     }
 
     function checkWinner() {
-        if (boardState.length % 2 === 0) return findWinningLine(getPlayer1Cells());
-        else return findWinningLine(getPlayer2Cells());
+        if (boardState.length % 2 === 0) return findWinningLine(getPlayer2Cells());
+        else return findWinningLine(getPlayer1Cells());
     }
 
 
@@ -70,7 +70,7 @@ const GameBoard = (function() {
         boardState.splice(0, boardState.length);
     }
 
-    return { getBoardState, tickCell, checkWinner, resetBoard, checkMoveValidity };
+    return { getBoardState, tickCell, checkWinner, resetBoard, checkMoveValidity, getPlayer1Cells, getPlayer2Cells };
 })();
 
 
@@ -92,9 +92,54 @@ const Computer = (function() {
         return `${["a", "b", "c"][Math.floor(Math.random() * 3)]}-${Math.floor(Math.random() * 3) + 1}`;
     }
 
-    // function defendCell() {
+    function findPotentialLine() {
+        const playerCells = game.getPlayer1Cells();
+        for (let row of ["a", "b", "c"]) {
+            const emptyCell = [];
+            for (let column = 1; column <= 3; column++) {
+                if (!playerCells.includes(`${row}-${column}`)) {
+                    emptyCell.push(`${row}-${column}`);
+                }
+            }
+            if (emptyCell.length === 1 && !game.getBoardState().includes(emptyCell[0])) return emptyCell[0];
+        }
 
-    // }
+        for (let column = 1; column <= 3; column++) {
+            const emptyCell = [];
+            for (let row of ["a", "b", "c"]) {
+                if (!playerCells.includes(`${row}-${column}`)) {
+                    emptyCell.push(`${row}-${column}`);
+                }
+            }
+            if (emptyCell.length === 1 && !game.getBoardState().includes(emptyCell[0])) return emptyCell[0];
+        }
+
+        const diagonalRight = ["a-1", "b-2", "c-3"];
+        const diagonalRightEmptyCell = []
+        for (let cell of diagonalRight) {
+            if (!playerCells.includes(cell)) diagonalRightEmptyCell.push(cell);
+            if (cell === "c-3" 
+            && diagonalRightEmptyCell.length === 1
+            && !game.getBoardState().includes(diagonalRightEmptyCell[0])) {
+                return diagonalRightEmptyCell[0];
+            }
+        }
+        const diagonalLeft = ["a-3", "b-2", "c-1"];
+        const diagonalLeftEmptyCell = []
+        for (let cell of diagonalLeft) {
+            if (!playerCells.includes(cell)) diagonalLeftEmptyCell.push(cell);
+            if (cell === "c-1" 
+            && diagonalLeftEmptyCell.length === 1
+            && !game.getBoardState().includes(diagonalLeftEmptyCell[0])) {
+                return diagonalLeftEmptyCell[0];
+            }
+        }
+        return null;
+    }
+
+    function defendCell() {
+
+    }
 
     function easyDifMove() {
         console.log("inside easy move");
@@ -105,7 +150,7 @@ const Computer = (function() {
         }
     }
 
-    return { makeMove };
+    return { makeMove, findPotentialLine };
 })();
 
 const ScoreBoard = (function() {
