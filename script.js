@@ -136,6 +136,41 @@ const Computer = (function() {
         return findPotentialLine("player1");
     }
 
+    function buildAttack() {
+        if (findPotentialLine("player2") === null) {
+            const player2Cells = game.getPlayer2Cells();
+            const goodLines = [];
+            for (let cell of player2Cells) {
+                const [row, column] = cell.split("-");
+                const emptyCells = [];
+                for (let i = 1; i <= 3; i++) {
+                    if (!game.getBoardState().includes(`${row}-${i}`)) emptyCells.push(`${row}-${i}`);
+                }
+                if (emptyCells.length === 2) goodLines.push(...emptyCells);
+                emptyCells.splice(0, emptyCells.length);
+
+                for (let i of ["a", "b", "c"]) {
+                    if (!game.getBoardState().includes(`${i}-${column}`)) emptyCells.push(`${i}-${column}`);
+                }
+                if (emptyCells.length === 2) goodLines.push(...emptyCells);
+                emptyCells.splice(0, emptyCells.length);
+
+                if (["a-1", "a-3", "b-2", "c-1", "c-3"].includes(cell)) {
+                    for (let array of [["a-1", "b-2", "c-3"], ["a-3", "b-2", "c-1"]]) {
+                        if (array.includes(cell)) {
+                            array.filter(element => element !== cell).forEach(element => {
+                                if (!game.getBoardState().includes(element)) emptyCells.push(element);
+                            });
+                            if (emptyCells.length === 2) goodLines.push(...emptyCells);
+                            emptyCells.splice(0, emptyCells.length);
+                        }
+                    }
+                }
+            }
+            return goodLines;
+        }
+    }
+
     function easyDifMove() {
         console.log("inside easy move");
         while(true) {
@@ -145,7 +180,12 @@ const Computer = (function() {
         }
     }
 
-    return { makeMove, findPotentialLine };
+    function mediumDifMove() {
+        if (game.getPlayer1Cells.length === 0) return easyDifMove();
+
+    }
+
+    return { makeMove, findPotentialLine, buildAttack };
 })();
 
 const ScoreBoard = (function() {
