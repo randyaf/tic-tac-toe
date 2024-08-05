@@ -92,8 +92,12 @@ const Computer = (function() {
         return `${["a", "b", "c"][Math.floor(Math.random() * 3)]}-${Math.floor(Math.random() * 3) + 1}`;
     }
 
-    function findPotentialLine() {
-        const playerCells = game.getPlayer1Cells();
+    function findPotentialLine(player) {
+        let playerCells;
+        if (player === "player1") playerCells = game.getPlayer1Cells();
+        else if (player === "player2") playerCells = game.getPlayer2Cells();
+        else playerCells = game.getPlayer1Cells();
+
         for (let row of ["a", "b", "c"]) {
             const emptyCell = [];
             for (let column = 1; column <= 3; column++) {
@@ -129,7 +133,7 @@ const Computer = (function() {
     }
 
     function defendCell() {
-
+        return findPotentialLine("player1");
     }
 
     function easyDifMove() {
