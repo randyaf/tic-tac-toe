@@ -114,24 +114,15 @@ const Computer = (function() {
             if (emptyCell.length === 1 && !game.getBoardState().includes(emptyCell[0])) return emptyCell[0];
         }
 
-        const diagonalRight = ["a-1", "b-2", "c-3"];
-        const diagonalRightEmptyCell = []
-        for (let cell of diagonalRight) {
-            if (!playerCells.includes(cell)) diagonalRightEmptyCell.push(cell);
-            if (cell === "c-3" 
-            && diagonalRightEmptyCell.length === 1
-            && !game.getBoardState().includes(diagonalRightEmptyCell[0])) {
-                return diagonalRightEmptyCell[0];
-            }
-        }
-        const diagonalLeft = ["a-3", "b-2", "c-1"];
-        const diagonalLeftEmptyCell = []
-        for (let cell of diagonalLeft) {
-            if (!playerCells.includes(cell)) diagonalLeftEmptyCell.push(cell);
-            if (cell === "c-1" 
-            && diagonalLeftEmptyCell.length === 1
-            && !game.getBoardState().includes(diagonalLeftEmptyCell[0])) {
-                return diagonalLeftEmptyCell[0];
+        for (let array of [["a-1", "b-2", "c-3"], ["a-3", "b-2", "c-1"]]) {
+            const emptyCell = [];
+            for (let cell of array) {
+                if (!playerCells.includes(cell)) emptyCell.push(cell);
+                if (cell === array[array.length - 1]
+                    && emptyCell.length === 1
+                    && !game.getBoardState().includes(emptyCell[0])) {
+                        return emptyCell[0];
+                    }
             }
         }
         return null;
