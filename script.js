@@ -82,9 +82,9 @@ const Computer = (function() {
     const game = GameBoard;
 
     function makeMove(difficulty = "easy") {
-        if (difficulty = "easy") return easyDifMove();
-        else if (difficulty = "medium") return mediumDifMove();
-        else if (difficulty = "hard") return hardDifMove();
+        if (difficulty === "easy") return easyDifMove();
+        else if (difficulty === "medium") return mediumDifMove();
+        else if (difficulty === "hard") return hardDifMove();
         else return easyDifMove();
     }
 
@@ -169,6 +169,7 @@ const Computer = (function() {
             }
             return goodLines;
         }
+        return null;
     }
 
     function easyDifMove() {
@@ -181,8 +182,13 @@ const Computer = (function() {
     }
 
     function mediumDifMove() {
-        if (game.getPlayer1Cells.length === 0) return easyDifMove();
-
+        if (game.getPlayer2Cells().length === 0) return easyDifMove();
+        const goodMoves = buildAttack();
+        console.dir(goodMoves);
+        if (goodMoves !== null) {
+            return goodMoves[Math.floor(Math.random() * goodMoves.length)];
+        } else if (goodMoves === null) return findPotentialLine("player2");
+        return easyDifMove();
     }
 
     return { makeMove, findPotentialLine, buildAttack };
