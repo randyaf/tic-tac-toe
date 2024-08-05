@@ -191,6 +191,15 @@ const Computer = (function() {
         return easyDifMove();
     }
 
+    function hardDifMove() {
+        if (game.getPlayer2Cells().length === 0) return easyDifMove();
+        const player1PotentialLine = findPotentialLine("player1");
+        const player2PotentialLine = findPotentialLine("player2");
+        if (player2PotentialLine !== null) return player2PotentialLine;
+        if (player1PotentialLine !== null) return player1PotentialLine;
+        mediumDifMove();
+    }
+
     return { makeMove, findPotentialLine, buildAttack };
 })();
 
