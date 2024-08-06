@@ -267,7 +267,14 @@ const GameBoardController = (function() {
     }
 
     function proceedRound(coordinate) {
-        if (!isGameFinished) game.tickCell(...coordinate.split("-"));
+        if (!isGameFinished) {
+            game.tickCell(...coordinate.split("-"));
+            if (!isGameFinished 
+                && game.checkWinner() === null 
+                && game.getBoardState().length < 9) {
+                    game.tickCell(...Computer.makeMove("hard").split("-"));
+                }
+        }
         if (!isGameFinished && game.checkWinner() !== null) {
             console.log("winning line: " + game.checkWinner());
             isGameFinished = true;
