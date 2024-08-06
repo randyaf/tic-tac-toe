@@ -167,7 +167,7 @@ const Computer = (function() {
                     }
                 }
             }
-            return goodLines;
+            return goodLines.length !== 0 ? goodLines : null;
         }
         return null;
     }
@@ -187,8 +187,7 @@ const Computer = (function() {
         console.dir(goodMoves);
         if (goodMoves !== null) {
             return goodMoves[Math.floor(Math.random() * goodMoves.length)];
-        } else if (goodMoves === null) return findPotentialLine("player2");
-        return easyDifMove();
+        } else return findPotentialLine("player2") ?? easyDifMove();
     }
 
     function hardDifMove() {
@@ -197,7 +196,7 @@ const Computer = (function() {
         const player2PotentialLine = findPotentialLine("player2");
         if (player2PotentialLine !== null) return player2PotentialLine;
         if (player1PotentialLine !== null) return player1PotentialLine;
-        mediumDifMove();
+        return mediumDifMove();
     }
 
     return { makeMove, findPotentialLine, buildAttack };
