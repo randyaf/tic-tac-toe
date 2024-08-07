@@ -19,7 +19,7 @@ const GameBoard = (function() {
     function checkMoveValidity(row, column) {
         if (boardState.find(coordinate => coordinate === `${row}-${column}`)) return false;
         else if (!["a", "b", "c"].includes(row)) return false;
-        else if (column < 1 && column > 3) return false;
+        else if (column < 1 || column > 3) return false;
         return true;
     }
 
