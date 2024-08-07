@@ -1,6 +1,5 @@
 const GameBoard = (function() {
     const boardState = [];
-    // const boardState = [1, "a-1", 2, "c-3", 3, "b-2"];
 
     function tickCell(row, column) {
         if (!checkMoveValidity(row, column)) return;
@@ -72,10 +71,6 @@ const GameBoard = (function() {
 
     return { getBoardState, tickCell, checkWinner, resetBoard, checkMoveValidity, getPlayer1Cells, getPlayer2Cells };
 })();
-
-
-// todo create the computer module with ability to make random move,
-// and even better if it can have multiple difficulties.
 
 const Computer = (function() {
 
@@ -173,9 +168,7 @@ const Computer = (function() {
     }
 
     function easyDifMove() {
-        console.log("inside easy move");
         while(true) {
-            console.count("loop");
             const coordinate = getRandomCoordinate();
             if(game.checkMoveValidity(...coordinate.split("-"))) return coordinate;
         }
@@ -184,7 +177,6 @@ const Computer = (function() {
     function mediumDifMove() {
         if (game.getPlayer2Cells().length === 0) return easyDifMove();
         const goodMoves = buildAttack();
-        console.dir(goodMoves);
         if (goodMoves !== null) {
             return goodMoves[Math.floor(Math.random() * goodMoves.length)];
         } else return findPotentialLine("player2") ?? easyDifMove();
@@ -277,7 +269,6 @@ const GameBoardController = (function() {
                 }
         }
         if (!isGameFinished && game.checkWinner() !== null) {
-            console.log("winning line: " + game.checkWinner());
             isGameFinished = true;
             return;
         } else if (!isGameFinished && game.getBoardState().length === 9) {
@@ -299,11 +290,6 @@ const GameBoardController = (function() {
     return { startGame, proceedRound, getBoardState };
 })();
 
-// GameBoardController.startGame();
-
-
-
-
 const GameBoardView = (function() {
     const gameBoardController = GameBoardController;
     const gameBoardElement = document.querySelector(".game-board");
@@ -320,7 +306,6 @@ const GameBoardView = (function() {
     }
 
     function render() {
-        // todo here to implement render
         const boardState = gameBoardController.getBoardState();
         for (let cell of cells) {
             if (boardState.includes(cell.dataset.coordinate)) {
