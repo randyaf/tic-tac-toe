@@ -2,7 +2,11 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    border: 1px solid grey;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #522258;
 }
 
 .container {
@@ -13,12 +17,15 @@
     height: 100vh;
     width: 900px;
     margin: 0 auto;
+    background-color: #8C3061;
+    transition: all 0.3s ease-in-out;
 }
 
 .container > .score-board {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    color: #ffffff;
     width: 600px;
     height: 100px;
 }
@@ -28,6 +35,8 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    font-size: 28px;
+    font-weight: 700;
 }
 
 .container > .game-board {
@@ -43,13 +52,30 @@
     padding: 10px;
 }
 
+.game-board > .cell:nth-of-type(3n + 2) {
+    border-right: 3px solid #C63C51;
+    border-left: 3px solid #C63C51;
+}
+
+.game-board > .cell:nth-of-type(n+4):nth-of-type(-n+6) {
+    border-top: 3px solid #C63C51;
+    border-bottom: 3px solid #C63C51;
+}
+
 .game-board > .cell img{
     display: none;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: invert(100);
 }
 
 .game-board > .cell img.visible {
     display: inline;
+}
+
+@media (max-width: 1000px) {
+    .container {
+        width: 100%;
+    }
 }

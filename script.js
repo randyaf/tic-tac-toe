@@ -271,7 +271,8 @@ const GameBoardController = (function() {
             game.tickCell(...coordinate.split("-"));
             if (!isGameFinished 
                 && game.checkWinner() === null 
-                && game.getBoardState().length < 9) {
+                && game.getBoardState().length < 9
+                && game.getBoardState().length % 2 !== 0) {
                     game.tickCell(...Computer.makeMove("hard").split("-"));
                 }
         }
